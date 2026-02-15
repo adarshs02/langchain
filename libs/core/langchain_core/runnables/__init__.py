@@ -50,6 +50,7 @@ if TYPE_CHECKING:
         RunnablePick,
     )
     from langchain_core.runnables.router import RouterInput, RouterRunnable
+    from langchain_core.runnables.tiered_semantic_router import TieredSemanticRouter
     from langchain_core.runnables.utils import (
         AddableDict,
         ConfigurableField,
@@ -83,6 +84,7 @@ __all__ = (
     "RunnableSerializable",
     "RunnableWithFallbacks",
     "RunnableWithMessageHistory",
+    "TieredSemanticRouter",
     "aadd",
     "add",
     "chain",
@@ -110,6 +112,7 @@ _dynamic_imports = {
     "run_in_executor": "config",
     "RunnableWithFallbacks": "fallbacks",
     "RunnableWithMessageHistory": "history",
+    "TieredSemanticRouter": "tiered_semantic_router",
     "RunnableAssign": "passthrough",
     "RunnablePassthrough": "passthrough",
     "RunnablePick": "passthrough",
