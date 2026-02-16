@@ -336,8 +336,9 @@ class TieredSemanticRouter(RunnableSerializable[LanguageModelInput, AIMessage]):
             child_config = patch_config(config, callbacks=run_manager.get_child())
             chunks: list[AIMessageChunk] = []
             accumulated: AIMessageChunk | None = None
-            with set_config_context(child_config):
-                astream = self.primary.astream(
+            with set_config_context(child_config) as context:
+                astream = context.run(
+                    self.primary.astream,
                     input,
                     config,
                     logprobs=True,
@@ -358,8 +359,13 @@ class TieredSemanticRouter(RunnableSerializable[LanguageModelInput, AIMessage]):
             # Fallback: stream from the stronger model
             child_config = patch_config(config, callbacks=run_manager.get_child())
             fallback_output: AIMessageChunk | None = None
-            with set_config_context(child_config):
-                astream = self.fallback.astream(input, config, **kwargs)
+            with set_config_context(child_config) as context:
+                astream = context.run(
+                    self.fallback.astream,
+                    input,
+                    config,
+                    **kwargs,
+                )
                 async for chunk in astream:
                     yield chunk
                     fallback_output = (
